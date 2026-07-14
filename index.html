@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Terpadu & Pendataan Anggota IPM-P Jayapura</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans & Space Grotesk -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=Space+Grotesk:wght=500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .font-heading {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .gradient-brand {
+            background: linear-gradient(135deg, #022c22 0%, #064e3b 40%, #0f766e 100%);
+        }
+
+        .gradient-gold {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+
+        .gradient-text-gold {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .kta-card-inner {
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .kta-card-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .kta-front,
+        .kta-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .kta-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Motif abstrak khas dekorasi wilayah */
+        .pattern-overlay {
+            background-image: radial-gradient(rgba(245, 158, 11, 0.1) 1px, transparent 0), radial-gradient(rgba(52, 211, 153, 0.08) 1px, transparent 0);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
+
+    <script>
+        const CONFIG = {
+            DATABASE_URL: "https://script.google.com/macros/s/AKfycbytlxlgJ2ff0_xcUNJ9l5U_CMjTeD2C61eLyLqgj3oApRh7GGTIi5yKe9AvdcZEIRds5w/exec",
+            APP_NAME: "IPM-P JAYAPURA",
+            LOGO_URL: "logo_IPMP-removebg-preview.png",
+            LOGO_FALLBACK: "https://placehold.co/150x150/022c22/fbbf24?text=IPM-P",
+            KORWILS: {
+                "Pirime": { code: "PRM", name: "Korwil Pirime" },
+                "Bugukgonak": { code: "BGK", name: "Korwil Bugukgonak" },
+                "Awina": { code: "AWN", name: "Korwil Awina" },
+                "Milimbo": { code: "MLB", name: "Korwil Milimbo" }
+            }
+        };
+    </script>
+
+    <!-- App Main Container -->
+    <div id="app" class="relative min-h-screen flex flex-col justify-between pattern-overlay">
+
+        <!-- Header Navigasi -->
+        <header
+            class="glass sticky top-0 z-40 border-b border-slate-200/80 shadow-md backdrop-blur-md transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-20">
+
+                    <!-- Logo & Brand Info -->
+                    <div class="flex items-center gap-3.5 cursor-pointer group" onclick="navigate('home')">
+                        <div
+                            class="bg-white p-1 rounded-2xl shadow-md border border-emerald-100 flex items-center justify-center w-14 h-14 overflow-hidden transform group-hover:scale-105 transition-all">
+                            <img src="logo_IPMP-removebg-preview.png" class="app-logo-img w-full h-full object-contain"
+                                alt="Logo IPM-P" onerror="this.src=CONFIG.LOGO_FALLBACK">
+                        </div>
+                        <div>
+                            <h1
+                                class="text-lg sm:text-xl font-extrabold tracking-tight text-emerald-950 leading-none flex items-center gap-1.5">
+                                APLIKASI IPM-P <span
+                                    class="text-amber-500 font-normal text-sm sm:text-base tracking-normal">JAYAPURA</span>
+                            </h1>
+                            <p
+                                class="text-[9px] sm:text-[10px] text-emerald-700 font-bold uppercase tracking-widest mt-1">
+                                Studi, Berjuang, Mengabdi</p>
+                        </div>
+                    </div>
+
+                    <!-- Desktop Nav Menu -->
+                    <nav class="hidden md:flex items-center gap-1.5">
+                        <button onclick="navigate('home')"
+                            class="nav-link px-4 py-2.5 rounded-xl font-semibold text-emerald-900 bg-emerald-50/80 hover:bg-emerald-50 transition-all flex items-center gap-2 text-sm">
+                            <i class="fas fa-home"></i> Beranda
+                        </button>
+                        <button onclick="navigate('search')"
+                            class="nav-link px-4 py-2.5 rounded-xl font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all flex items-center gap-2 text-sm">
+                            <i class="fas fa-search"></i> Direktori Anggota
+                        </button>
+                        <button id="btn-dashboard-nav" onclick="navigate('dashboard')"
+                            class="hidden nav-link px-4 py-2.5 rounded-xl font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all flex items-center gap-2 text-sm">
+                            <i class="fas fa-id-card"></i> KTA & Biodata
+                        </button>
+                        <button id="btn-admin-nav" onclick="navigate('admin')"
+                            class="hidden nav-link relative px-4 py-2.5 rounded-xl font-semibold text-rose-700 hover:bg-rose-50 transition-all flex items-center gap-2 text-sm border border-transparent hover:border-rose-100">
+                            <i class="fas fa-user-shield"></i> Portal Admin
+                            <span id="nav-pending-badge"
+                                class="absolute -top-1 -right-1 bg-rose-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+                        </button>
+                    </nav>
+
+                    <!-- Auth Actions / Profile Info -->
+                    <div class="flex items-center gap-3">
+                        <div id="auth-buttons" class="hidden sm:flex items-center gap-2">
+                            <button onclick="navigate('login')"
+                                class="px-4 py-2.5 text-sm font-bold text-emerald-900 hover:bg-emerald-50 rounded-xl transition-all">Masuk</button>
+                            <button onclick="navigate('register')"
+                                class="bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-sm px-5 py-2.5 rounded-xl hover:shadow-lg hover:shadow-amber-500/20 active:scale-95 transition-all">Gabung</button>
+                        </div>
+                        <div id="user-profile-menu"
+                            class="hidden flex items-center gap-3 bg-emerald-50 border border-emerald-100/80 py-1.5 pl-3 pr-2 rounded-full shadow-inner">
+                            <div class="flex flex-col text-right">
+                                <span id="nav-user-name"
+                                    class="text-xs font-extrabold text-emerald-950 max-w-[120px] truncate leading-tight">Pengguna</span>
+                                <span id="nav-user-role"
+                                    class="text-[9px] text-emerald-600 font-bold uppercase tracking-wider leading-none mt-0.5">Anggota</span>
+                            </div>
+                            <button onclick="logout()"
+                                class="w-8 h-8 rounded-full bg-white text-red-500 hover:bg-red-50 hover:text-red-700 shadow-md flex items-center justify-center transition-all"
+                                title="Keluar">
+                                <i class="fas fa-sign-out-alt text-xs"></i>
+                            </button>
+                        </div>
+                        <!-- Mobile Menu Button -->
+                        <button onclick="toggleMobileMenu()"
+                            class="p-2 text-emerald-950 hover:bg-emerald-50 rounded-xl transition-all focus:outline-none md:hidden">
+                            <i class="fas fa-bars text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Dropdown Menu -->
+            <div id="mobile-menu"
+                class="hidden border-t border-slate-200 bg-white/95 backdrop-blur-md px-4 py-4 space-y-2.5 shadow-xl md:hidden">
+                <button onclick="navigate('home'); toggleMobileMenu()"
+                    class="w-full text-left px-4 py-3 rounded-xl text-slate-700 font-semibold hover:bg-emerald-50 hover:text-emerald-950 flex items-center gap-3 transition-all">
+                    <i class="fas fa-home text-emerald-600"></i> Beranda
+                </button>
+                <button onclick="navigate('search'); toggleMobileMenu()"
+                    class="w-full text-left px-4 py-3 rounded-xl text-slate-700 font-semibold hover:bg-emerald-50 hover:text-emerald-950 flex items-center gap-3 transition-all">
+                    <i class="fas fa-search text-emerald-600"></i> Direktori Anggota
+                </button>
+                <button id="btn-dashboard-nav-mobile" onclick="navigate('dashboard'); toggleMobileMenu()"
+                    class="hidden w-full text-left px-4 py-3 rounded-xl text-slate-700 font-semibold hover:bg-emerald-50 hover:text-emerald-950 flex items-center gap-3 transition-all">
+                    <i class="fas fa-id-card text-emerald-600"></i> KTA & Biodata
+                </button>
+                <button id="btn-admin-nav-mobile" onclick="navigate('admin'); toggleMobileMenu()"
+                    class="hidden w-full text-left px-4 py-3 rounded-xl text-rose-700 font-semibold hover:bg-rose-50 flex items-center gap-3 transition-all">
+                    <i class="fas fa-user-shield text-emerald-600"></i> Portal Admin
+                </button>
+                <div id="auth-buttons-mobile" class="pt-4 border-t border-slate-100 flex flex-col gap-2.5">
+                    <button onclick="navigate('login'); toggleMobileMenu()"
+                        class="w-full py-3 text-sm font-bold text-emerald-900 hover:bg-emerald-50 rounded-xl transition-all">Masuk</button>
+                    <button onclick="navigate('register'); toggleMobileMenu()"
+                        class="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold py-3 rounded-xl text-center shadow-md">Gabung</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+
+            <!-- VIEW: HOME (BERANDA RESMI) -->
+            <section id="view-home" class="view space-y-16 animate-fade-in">
+
+                <!-- Premium Hero Section -->
+                <div
+                    class="relative rounded-[32px] overflow-hidden gradient-brand text-white py-20 px-8 sm:px-12 lg:px-20 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-12">
+                    <div
+                        class="absolute -right-24 -bottom-24 w-[450px] h-[450px] bg-emerald-500/20 rounded-full blur-[100px] pointer-events-none">
+                    </div>
+                    <div
+                        class="absolute -left-24 -top-24 w-[450px] h-[450px] bg-amber-500/15 rounded-full blur-[100px] pointer-events-none">
+                    </div>
+
+                    <div class="max-w-2xl space-y-8 relative z-10">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="bg-white p-1 rounded-2xl border border-white/20 shadow-2xl w-16 h-16 flex items-center justify-center overflow-hidden">
+                                <img src="logo_IPMP-removebg-preview.png"
+                                    class="app-logo-img w-full h-full object-contain" alt="Logo"
+                                    onerror="this.src=CONFIG.LOGO_FALLBACK">
+                            </div>
+                            <div>
+                                <span
+                                    class="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md text-amber-400 font-bold text-[11px] uppercase tracking-widest rounded-full border border-white/10">Sistem
+                                    Pendataan Terpadu</span>
+                                <p class="text-slate-300 text-xs mt-0.5">Dikelola Pengurus Pusat IPM-P</p>
+                            </div>
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+                            Portal Resmi Basis Data Alumni & Mahasiswa Aktif <span class="gradient-text-gold">IPM-P
+                                Jayapura</span>
+                        </h2>
+                        <p class="text-emerald-100/90 text-sm sm:text-base leading-relaxed">
+                            Mempersatukan dan mendata seluruh generasi muda intelektual dari 4 Koordinator Wilayah
+                            (Pirime, Bugukgonak, Awina, Milimbo) di Kota Studi Jayapura. Lengkapi biodata Anda sekarang
+                            untuk verifikasi KTA Digital resmi.
+                        </p>
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <button onclick="navigate('register')"
+                                class="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 px-8 py-4 rounded-2xl font-bold transition-all shadow-xl hover:shadow-amber-500/20 active:scale-95 flex items-center gap-2">
+                                <i class="fas fa-user-plus"></i> Daftar Anggota Baru
+                            </button>
+                            <button onclick="navigate('search')"
+                                class="bg-white/10 hover:bg-white/20 border border-white/25 px-8 py-4 rounded-2xl font-bold text-white transition-all flex items-center gap-2 backdrop-blur-sm">
+                                <i class="fas fa-search"></i> Telusuri Direktori
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Announcement Card / Sidebar -->
+                    <div class="relative z-10 w-full lg:w-1/3 flex justify-center">
+                        <div
+                            class="glass text-slate-800 p-8 rounded-3xl w-full max-w-sm border border-white/30 shadow-2xl relative overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 w-24 h-24 bg-emerald-50/5 rounded-full blur-xl pointer-events-none">
+                            </div>
+                            <h3
+                                class="text-lg font-bold text-emerald-950 mb-5 flex items-center gap-2.5 border-b border-slate-100 pb-3">
+                                <i class="fas fa-bullhorn text-amber-500 text-xl animate-bounce"></i> Informasi Alur
+                                Baru
+                            </h3>
+                            <ul class="space-y-4 text-xs sm:text-sm text-slate-600">
+                                <li class="flex gap-3 items-start">
+                                    <span class="text-amber-500 mt-1"><i class="fas fa-user-lock"></i></span>
+                                    <span>Setiap pendaftar baru wajib menunggu **persetujuan Admin** sebelum dapat login
+                                        masuk dashboard.</span>
+                                </li>
+                                <li class="flex gap-3 items-start">
+                                    <span class="text-emerald-600 mt-1"><i class="fas fa-shield-halved"></i></span>
+                                    <span>Setelah diverifikasi, Anda akan mendapatkan **Kode Unik Korwil** untuk merilis
+                                        KTA Digital Anda.</span>
+                                </li>
+                                <li class="flex gap-3 items-start">
+                                    <span class="text-emerald-600 mt-1"><i class="fas fa-id-card-clip"></i></span>
+                                    <span>KTA Digital dapat dicetak fisik dan digunakan sebagai tanda pengenal sah
+                                        mahasiswa di Jayapura.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics Dashboard Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                    <div
+                        class="bg-white p-7 rounded-3xl border border-slate-100 shadow-md flex items-center gap-5 hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300">
+                        <div
+                            class="bg-emerald-50 text-emerald-600 w-14 h-14 rounded-2xl text-2xl flex items-center justify-center shadow-inner">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Anggota</p>
+                            <h4 id="stat-total" class="text-3xl font-black text-slate-800 mt-1">0</h4>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white p-7 rounded-3xl border border-slate-100 shadow-md flex items-center gap-5 hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300">
+                        <div
+                            class="bg-sky-50 text-sky-600 w-14 h-14 rounded-2xl text-2xl flex items-center justify-center shadow-inner">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Mahasiswa Aktif</p>
+                            <h4 id="stat-aktif" class="text-3xl font-black text-slate-800 mt-1">0</h4>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white p-7 rounded-3xl border border-slate-100 shadow-md flex items-center gap-5 hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300">
+                        <div
+                            class="bg-amber-50 text-amber-600 w-14 h-14 rounded-2xl text-2xl flex items-center justify-center shadow-inner">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Alumni</p>
+                            <h4 id="stat-alumni" class="text-3xl font-black text-slate-800 mt-1">0</h4>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white p-7 rounded-3xl border border-slate-100 shadow-md flex items-center gap-5 hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300">
+                        <div
+                            class="bg-rose-50 text-rose-600 w-14 h-14 rounded-2xl text-2xl flex items-center justify-center shadow-inner">
+                            <i class="fas fa-user-clock"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Butuh Persetujuan</p>
+                            <h4 id="stat-pending" class="text-3xl font-black text-rose-600 mt-1">0</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Korwil Official Grid -->
+                <div class="space-y-8">
+                    <div class="text-center max-w-xl mx-auto space-y-2">
+                        <span
+                            class="text-xs font-bold text-emerald-600 uppercase tracking-widest bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-100">Pembagian
+                            Wilayah Administrasi</span>
+                        <h3 class="text-2xl sm:text-3xl font-black text-slate-800">Koordinator Wilayah IPM-P</h3>
+                        <p class="text-slate-500 text-sm">Pembagian data pelajar dan mahasiswa berdasarkan asal wilayah
+                            koordinasi resmi.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- Korwil Pirime -->
+                        <div
+                            class="bg-white p-7 rounded-3xl border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
+                            <div
+                                class="absolute -right-8 -bottom-8 w-28 h-28 bg-emerald-50 group-hover:scale-150 rounded-full transition-all duration-500">
+                            </div>
+                            <div>
+                                <span
+                                    class="text-[10px] font-black text-emerald-700 uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-lg">KODE:
+                                    PRM</span>
+                                <h4 class="text-xl font-extrabold text-slate-800 mt-4">Korwil Pirime</h4>
+                                <p class="text-xs text-slate-500 mt-2 leading-relaxed">Pusat komando utama dan
+                                    koordinasi sentral bagi seluruh pelajar & mahasiswa asal Pirime.</p>
+                            </div>
+                            <div
+                                class="mt-6 pt-5 border-t border-slate-100 flex justify-between text-xs font-bold text-slate-600 relative z-10">
+                                <span>Aktif: <strong id="count-prm-aktif"
+                                        class="text-emerald-600 text-sm">0</strong></span>
+                                <span>Alumni: <strong id="count-prm-alumni"
+                                        class="text-amber-600 text-sm">0</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Korwil Bugukgonak -->
+                        <div
+                            class="bg-white p-7 rounded-3xl border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
+                            <div
+                                class="absolute -right-8 -bottom-8 w-28 h-28 bg-teal-50 group-hover:scale-150 rounded-full transition-all duration-500">
+                            </div>
+                            <div>
+                                <span
+                                    class="text-[10px] font-black text-teal-700 uppercase tracking-widest bg-teal-50 px-3 py-1 rounded-lg">KODE:
+                                    BGK</span>
+                                <h4 class="text-xl font-extrabold text-slate-800 mt-4">Korwil Bugukgonak</h4>
+                                <p class="text-xs text-slate-500 mt-2 leading-relaxed">Wadah pembinaan kebersamaan serta
+                                    pergerakan pemuda intelektual daerah Bugukgonak.</p>
+                            </div>
+                            <div
+                                class="mt-6 pt-5 border-t border-slate-100 flex justify-between text-xs font-bold text-slate-600 relative z-10">
+                                <span>Aktif: <strong id="count-bgk-aktif"
+                                        class="text-teal-600 text-sm">0</strong></span>
+                                <span>Alumni: <strong id="count-bgk-alumni"
+                                        class="text-amber-600 text-sm">0</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Korwil Awina -->
+                        <div
+                            class="bg-white p-7 rounded-3xl border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
+                            <div
+                                class="absolute -right-8 -bottom-8 w-28 h-28 bg-blue-50 group-hover:scale-150 rounded-full transition-all duration-500">
+                            </div>
+                            <div>
+                                <span
+                                    class="text-[10px] font-black text-blue-700 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-lg">KODE:
+                                    AWN</span>
+                                <h4 class="text-xl font-extrabold text-slate-800 mt-4">Korwil Awina</h4>
+                                <p class="text-xs text-slate-500 mt-2 leading-relaxed">Lembaga perhimpunan mahasiswa
+                                    Awina dalam memajukan ilmu pengetahuan dan persaudaraan.</p>
+                            </div>
+                            <div
+                                class="mt-6 pt-5 border-t border-slate-100 flex justify-between text-xs font-bold text-slate-600 relative z-10">
+                                <span>Aktif: <strong id="count-awn-aktif"
+                                        class="text-blue-600 text-sm">0</strong></span>
+                                <span>Alumni: <strong id="count-awn-alumni"
+                                        class="text-amber-600 text-sm">0</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Korwil Milimbo -->
+                        <div
+                            class="bg-white p-7 rounded-3xl border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
+                            <div
+                                class="absolute -right-8 -bottom-8 w-28 h-28 bg-indigo-50 group-hover:scale-150 rounded-full transition-all duration-500">
+                            </div>
+                            <div>
+                                <span
+                                    class="text-[10px] font-black text-indigo-700 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-lg">KODE:
+                                    MLB</span>
+                                <h4 class="text-xl font-extrabold text-slate-800 mt-4">Korwil Milimbo</h4>
+                                <p class="text-xs text-slate-500 mt-2 leading-relaxed">Penyedia wadah kreasi intelektual
+                                    dan solidaritas generasi penerus daerah Milimbo.</p>
+                            </div>
+                            <div
+                                class="mt-6 pt-5 border-t border-slate-100 flex justify-between text-xs font-bold text-slate-600 relative z-10">
+                                <span>Aktif: <strong id="count-mlb-aktif"
+                                        class="text-indigo-600 text-sm">0</strong></span>
+                                <span>Alumni: <strong id="count-mlb-alumni"
+                                        class="text-amber-600 text-sm">0</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: SEARCH / DIREKTORI ANGGOTA -->
+            <section id="view-search" class="view hidden space-y-8 animate-fade-in">
+                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-md space-y-6">
+                    <div>
+                        <h3 class="text-2xl font-black text-slate-800">Direktori Publik Anggota</h3>
+                        <p class="text-slate-500 text-sm">Gunakan pencarian adaptif untuk melacak keanggotaan mahasiswa
+                            maupun alumni IPM-P di Jayapura.</p>
+                    </div>
+
+                    <!-- Search Controls Layout -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="md:col-span-2 relative">
+                            <span
+                                class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 pointer-events-none">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" id="search-input" onkeyup="filterSearch()"
+                                placeholder="Cari Nama Lengkap, NIM, atau Kode KTA..."
+                                class="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-200 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm transition-all shadow-inner">
+                        </div>
+                        <div>
+                            <select id="search-korwil" onchange="filterSearch()"
+                                class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm transition-all shadow-sm">
+                                <option value="">Semua Korwil</option>
+                                <option value="Pirime">Korwil Pirime</option>
+                                <option value="Bugukgonak">Korwil Bugukgonak</option>
+                                <option value="Awina">Korwil Awina</option>
+                                <option value="Milimbo">Korwil Milimbo</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select id="search-status" onchange="filterSearch()"
+                                class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm transition-all shadow-sm">
+                                <option value="">Semua Status</option>
+                                <option value="Aktif">Mahasiswa Aktif</option>
+                                <option value="Alumni">Alumni</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Database Result Table -->
+                <div class="bg-white rounded-3xl border border-slate-100 shadow-md overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                    <th class="py-5 px-6">Informasi Anggota</th>
+                                    <th class="py-5 px-6">Identitas KTA</th>
+                                    <th class="py-5 px-6">Korwil</th>
+                                    <th class="py-5 px-6">Status</th>
+                                    <th class="py-5 px-6">Instalasi / Jurusan</th>
+                                    <th class="py-5 px-6">Tahun Masuk</th>
+                                </tr>
+                            </thead>
+                            <tbody id="search-results-body" class="divide-y divide-slate-100 text-sm text-slate-700">
+                                <!-- Dynamic Generated Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Empty State -->
+                    <div id="search-empty-state" class="hidden p-16 text-center text-slate-500">
+                        <div
+                            class="w-20 h-20 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <p class="font-bold text-base text-slate-700">Anggota Tidak Ditemukan</p>
+                        <p class="text-xs text-slate-400 mt-1">Coba gunakan nama yang lebih umum atau periksa ejaan Anda
+                            kembali.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: LOGIN -->
+            <section id="view-login" class="view hidden max-w-md mx-auto py-8 animate-fade-in">
+                <div
+                    class="bg-white p-8 sm:p-10 rounded-[32px] border border-slate-100 shadow-2xl space-y-8 relative overflow-hidden">
+                    <div
+                        class="absolute -top-12 -left-12 w-32 h-32 bg-emerald-50 rounded-full blur-2xl pointer-events-none">
+                    </div>
+
+                    <div class="text-center space-y-3 relative z-10">
+                        <div
+                            class="bg-white w-20 h-20 rounded-2xl mx-auto flex items-center justify-center shadow-lg border border-slate-100 p-2 overflow-hidden">
+                            <img src="logo_IPMP-removebg-preview.png" class="app-logo-img w-full h-full object-contain"
+                                alt="Logo" onerror="this.src=CONFIG.LOGO_FALLBACK">
+                        </div>
+                        <h3 class="text-2xl font-black text-emerald-950">Selamat Datang</h3>
+                        <p class="text-slate-400 text-xs sm:text-sm">Akses Akun Terintegrasi Pengurus & Anggota</p>
+                    </div>
+
+                    <form id="form-login" onsubmit="handleLogin(event)" class="space-y-5 relative z-10">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Username</label>
+                            <input type="text" id="login-username" required
+                                class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm transition-all"
+                                placeholder="Masukkan nama pengguna...">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Password</label>
+                            <input type="password" id="login-password" required
+                                class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm transition-all"
+                                placeholder="••••••••">
+                        </div>
+                        <button type="submit"
+                            class="w-full gradient-brand text-white py-4 rounded-2xl font-bold shadow-lg shadow-emerald-950/20 hover:opacity-95 active:scale-95 transition-all text-sm mt-2 flex items-center justify-center gap-2">
+                            <span>Masuk Sesi</span> <i class="fas fa-arrow-right-to-bracket"></i>
+                        </button>
+                    </form>
+                    <p class="text-xs text-center text-slate-500 relative z-10">Belum terdaftar sebagai anggota resmi?
+                        <a onclick="navigate('register')"
+                            class="text-emerald-600 font-bold hover:underline cursor-pointer">Registrasi Baru</a>
+                    </p>
+                </div>
+            </section>
+
+            <!-- VIEW: REGISTER -->
+            <section id="view-register" class="view hidden max-w-md mx-auto py-8 animate-fade-in">
+                <div
+                    class="bg-white p-8 sm:p-10 rounded-[32px] border border-slate-100 shadow-2xl space-y-8 relative overflow-hidden">
+                    <div
+                        class="absolute -top-12 -right-12 w-32 h-32 bg-amber-50 rounded-full blur-2xl pointer-events-none">
+                    </div>
+
+                    <div class="text-center space-y-3 relative z-10">
+                        <div
+                            class="bg-white w-20 h-20 rounded-2xl mx-auto flex items-center justify-center shadow-lg border border-slate-100 p-2 overflow-hidden">
+                            <img src="logo_IPMP-removebg-preview.png" class="app-logo-img w-full h-full object-contain"
+                                alt="Logo" onerror="this.src=CONFIG.LOGO_FALLBACK">
+                        </div>
+                        <h3 class="text-2xl font-black text-emerald-950">Daftar Akun Baru</h3>
+                        <p class="text-slate-400 text-xs sm:text-sm">Registrasi Keanggotaan IPM-P Jayapura</p>
+                    </div>
+
+                    <form id="form-register" onsubmit="handleRegister(event)" class="space-y-5 relative z-10">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Username</label>
+                            <input type="text" id="reg-username" required
+                                class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm transition-all"
+                                placeholder="Gunakan huruf & angka saja...">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Password</label>
+                            <input type="password" id="reg-password" required
+                                class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm transition-all"
+                                placeholder="Minimal 6 karakter...">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Koordinator Wilayah
+                                Asal (Korwil)</label>
+                            <select id="reg-korwil" required
+                                class="w-full px-4 py-3.5 rounded-2xl border border-slate-200 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm transition-all shadow-sm">
+                                <option value="" disabled selected>Pilih Asal Korwil Anda</option>
+                                <option value="Pirime">Korwil Pirime</option>
+                                <option value="Bugukgonak">Korwil Bugukgonak</option>
+                                <option value="Awina">Korwil Awina</option>
+                                <option value="Milimbo">Korwil Milimbo</option>
+                            </select>
+                        </div>
+                        <button type="submit"
+                            class="w-full gradient-brand text-white py-4 rounded-2xl font-bold shadow-lg shadow-emerald-950/20 hover:opacity-95 active:scale-95 transition-all text-sm mt-2 flex items-center justify-center gap-2">
+                            <span>Selesaikan Akun</span> <i class="fas fa-user-check"></i>
+                        </button>
+                    </form>
+                    <p class="text-xs text-center text-slate-500 relative z-10">Sudah terdaftar? <a
+                            onclick="navigate('login')"
+                            class="text-emerald-600 font-bold hover:underline cursor-pointer">Silakan Masuk</a></p>
+                </div>
+            </section>
+
+            <!-- VIEW: USER DASHBOARD / BIODATA & KTA DIGITAL -->
+            <section id="view-dashboard" class="view hidden space-y-12 animate-fade-in">
+
+                <div
+                    class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                    <div>
+                        <h3 class="text-2xl font-black text-slate-800">Ruang Data Mandiri & KTA Digital</h3>
+                        <p class="text-slate-500 text-sm">Kelola informasi studi Anda untuk otomatis memperbarui Kartu
+                            Tanda Anggota (KTA) Digital Anda.</p>
+                    </div>
+                    <div id="korwil-badge-container"
+                        class="hidden items-center gap-4 bg-emerald-50 border border-emerald-100/80 p-4 rounded-2xl shadow-inner w-full md:w-auto">
+                        <div
+                            class="bg-emerald-600 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-lg shadow-emerald-600/20">
+                            <i class="fas fa-barcode"></i>
+                        </div>
+                        <div>
+                            <span class="text-[9px] text-slate-400 uppercase tracking-widest font-black block">Kode Unik
+                                Anggota</span>
+                            <p id="txt-kode-unik" class="text-lg font-black text-emerald-950 tracking-wider">PRM-001</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+                    <!-- KTA Interactive Viewer (Left - 5 Cols) -->
+                    <div class="lg:col-span-5 flex flex-col items-center gap-6">
+                        <div class="w-full text-center">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Tampilan
+                                Kartu Identitas</span>
+                            <p class="text-xs text-slate-500">Sentuh/klik kartu untuk membalik dan melihat bagian
+                                belakang.</p>
+                        </div>
+
+                        <!-- 3D Flip Card Shell -->
+                        <div class="w-full max-w-[400px] h-[250px] cursor-pointer group" onclick="toggleKTAFlip()"
+                            style="perspective: 1000px;">
+                            <div id="kta-card-inner"
+                                class="kta-card-inner relative w-full h-full rounded-2xl shadow-2xl">
+
+                                <!-- KTA FRONT VIEW -->
+                                <div
+                                    class="kta-front absolute inset-0 w-full h-full rounded-2xl p-5 text-white flex flex-col justify-between overflow-hidden gradient-brand border border-white/10 select-none">
+                                    <div class="absolute inset-0 pattern-overlay pointer-events-none opacity-40"></div>
+                                    <!-- Card Header -->
+                                    <div
+                                        class="flex items-center justify-between border-b border-white/15 pb-2.5 relative z-10">
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="bg-white p-0.5 rounded-lg w-8 h-8 flex items-center justify-center overflow-hidden">
+                                                <img src="logo_IPMP-removebg-preview.png"
+                                                    class="app-logo-img w-full h-full object-contain" alt="Logo"
+                                                    onerror="this.src=CONFIG.LOGO_FALLBACK">
+                                            </div>
+                                            <div>
+                                                <h5 id="kta-header-title"
+                                                    class="text-[9px] font-black tracking-tight leading-none uppercase font-heading">
+                                                    IKATAN PELAJAR MAHASISWA PIRIME</h5>
+                                                <span
+                                                    class="text-[7px] text-amber-400 tracking-widest font-bold block mt-0.5">KOTA
+                                                    STUDI JAYAPURA</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card Body -->
+                                    <div class="grid grid-cols-3 gap-3 items-center relative z-10 my-auto">
+                                        <!-- Profile Frame -->
+                                        <div
+                                            class="col-span-1 aspect-[3/4] rounded-lg bg-emerald-950/80 border border-white/20 overflow-hidden flex items-center justify-center relative">
+                                            <div class="text-center">
+                                                <i class="fas fa-user-circle text-4xl text-emerald-500"></i>
+                                                <span
+                                                    class="text-[6px] font-black text-slate-300 block uppercase tracking-wider mt-1">IPM-P</span>
+                                            </div>
+                                        </div>
+                                        <!-- Profile Info -->
+                                        <div class="col-span-2 space-y-1.5">
+                                            <div>
+                                                <span
+                                                    class="text-[7px] text-emerald-300 uppercase font-black leading-none block">Nama
+                                                    Lengkap</span>
+                                                <p id="kta-front-nama" class="text-sm font-bold truncate">Nama Lengkap
+                                                    Anda</p>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <div>
+                                                    <span
+                                                        class="text-[7px] text-emerald-300 uppercase font-black leading-none block">Korwil
+                                                        Asal</span>
+                                                    <p id="kta-front-korwil"
+                                                        class="text-xs font-bold text-amber-300 truncate">-</p>
+                                                </div>
+                                                <div>
+                                                    <span
+                                                        class="text-[7px] text-emerald-300 uppercase font-black leading-none block">NIM</span>
+                                                    <p id="kta-front-nim" class="text-xs font-bold truncate">-</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card Footer -->
+                                    <div
+                                        class="flex items-end justify-between border-t border-white/10 pt-2.5 relative z-10 text-[7px] text-slate-300">
+                                        <div>
+                                            <span>Masa Berlaku:</span>
+                                            <strong class="text-emerald-300 block">SELAMA AKTIF</strong>
+                                        </div>
+                                        <div class="text-right">
+                                            <span>Kode KTA:</span>
+                                            <strong id="kta-front-kode"
+                                                class="text-amber-400 block tracking-wider">-</strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- KTA BACK VIEW -->
+                                <div
+                                    class="kta-back absolute inset-0 w-full h-full rounded-2xl p-5 text-slate-800 flex flex-col justify-between overflow-hidden bg-white border-2 border-emerald-900 shadow-inner select-none">
+                                    <div class="absolute inset-0 pattern-overlay pointer-events-none opacity-5"></div>
+                                    <!-- Content -->
+                                    <div class="text-center space-y-1.5 relative z-10 border-b border-slate-100 pb-2">
+                                        <h6 class="text-[9px] font-black text-emerald-950 tracking-wider font-heading">
+                                            IKRAR KELUARGA BESAR IPM-P</h6>
+                                        <p class="text-[8px] italic text-slate-500 leading-tight">"Menuntut Ilmu,
+                                            Menjaga Eksistensi Persaudaraan, Mengabdi untuk Kemandirian Tanah Papua."
+                                        </p>
+                                    </div>
+
+                                    <div class="grid grid-cols-3 gap-3 items-center relative z-10 my-auto">
+                                        <!-- Official Stamp Matrix -->
+                                        <div
+                                            class="col-span-2 text-[7px] text-slate-500 space-y-1 border-r border-slate-100 pr-2 leading-snug">
+                                            <p class="font-bold text-slate-700">KETENTUAN KARTU ANGGOTA:</p>
+                                            <p>1. Wajib dibawa saat musyawarah daerah.</p>
+                                            <p>2. Tidak boleh dipindahtangankan.</p>
+                                            <p>3. Jika hilang, segera laporkan ke pengurus.</p>
+                                        </div>
+                                        <!-- QR Code Target Container -->
+                                        <div class="col-span-1 flex items-center justify-center">
+                                            <img id="kta-back-qr"
+                                                src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=IPMP-VERIFIED"
+                                                class="w-16 h-16 object-contain border border-slate-200 p-1 bg-white rounded shadow-sm"
+                                                alt="KTA QR Code">
+                                        </div>
+                                    </div>
+
+                                    <!-- Sign Seal -->
+                                    <div
+                                        class="flex items-end justify-between border-t border-slate-100 pt-2 relative z-10">
+                                        <div class="text-[6px] text-slate-400">
+                                            <span>Diterbitkan di:</span>
+                                            <strong class="text-emerald-950 block">JAYAPURA</strong>
+                                        </div>
+                                        <div class="text-[6px] text-center text-emerald-950">
+                                            <span class="block text-slate-500">Sekretaris Umum PP,</span>
+                                            <div
+                                                class="h-4 flex items-center justify-center font-serif text-[8px] text-emerald-700 italic">
+                                                Sekum IPM-P</div>
+                                            <span class="border-t border-slate-300 block pt-0.5 font-bold">Lanni Jaya
+                                                Distrik</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Print Trigger -->
+                        <button onclick="window.print()"
+                            class="w-full max-w-[400px] border-2 border-slate-200 hover:border-emerald-500 hover:text-emerald-600 bg-white p-3.5 rounded-2xl font-bold text-sm text-slate-600 transition-all flex items-center justify-center gap-2 shadow-sm">
+                            <i class="fas fa-print"></i> Cetak Kartu KTA Fisik
+                        </button>
+                    </div>
+
+                    <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-md">
+                        <form id="form-biodata" onsubmit="handleSaveBiodata(event)" class="space-y-6">
+                            <input type="hidden" id="biodata-id">
+
+                            <h4 class="text-lg font-bold text-slate-800 border-b border-slate-100 pb-3">Formulir
+                                Informasi Akademik & Kontak</h4>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Nama
+                                        Lengkap</label>
+                                    <input type="text" id="bio-nama" required
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 text-sm transition-all"
+                                        placeholder="Nama Lengkap Sesuai KTP/Ijazah">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">NIM (Nomor
+                                        Induk Mahasiswa)</label>
+                                    <input type="text" id="bio-nim"
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 text-sm transition-all"
+                                        placeholder="Contoh: 202308101">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Status
+                                        Anggota</label>
+                                    <select id="bio-status" onchange="toggleTahunLulus()" required
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 text-sm transition-all shadow-sm">
+                                        <option value="Aktif">Mahasiswa Aktif</option>
+                                        <option value="Alumni">Alumni</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Koordinator
+                                        Wilayah</label>
+                                    <input type="text" id="bio-korwil" readonly
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 text-slate-400 font-bold text-sm outline-none cursor-not-allowed">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Universitas
+                                        / Kampus</label>
+                                    <input type="text" id="bio-kampus" required
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 text-sm transition-all"
+                                        placeholder="Contoh: Universitas Cenderawasih">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Jurusan /
+                                        Program Studi</label>
+                                    <input type="text" id="bio-jurusan" required
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 text-sm transition-all"
+                                        placeholder="Contoh: Teknik Sipil">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Tahun
+                                        Angkatan Masuk</label>
+                                    <input type="number" id="bio-tahun-masuk" required
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 text-sm transition-all"
+                                        placeholder="Tahun angkatan kuliah">
+                                </div>
+                                <div id="div-tahun-lulus" class="space-y-1.5 hidden animate-fade-in">
+                                    <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Tahun
+                                        Kelulusan Alumni</label>
+                                    <input type="number" id="bio-tahun-lulus"
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 text-sm transition-all"
+                                        placeholder="Tahun kelulusan resmi">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Nomor HP /
+                                        WhatsApp Aktif</label>
+                                    <input type="tel" id="bio-hp" required
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 text-sm transition-all"
+                                        placeholder="Contoh: 0812xxxxxxxx">
+                                </div>
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-bold text-slate-600 uppercase tracking-wider">Alamat Lengkap
+                                    di Kota Studi Jayapura</label>
+                                <textarea id="bio-alamat" rows="3" required
+                                    class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 text-sm transition-all"
+                                    placeholder="Masukkan alamat asrama, kontrakan, kost secara detail..."></textarea>
+                            </div>
+
+                            <button type="submit"
+                                class="w-full gradient-brand text-white py-4 rounded-2xl font-bold shadow-lg shadow-emerald-950/20 hover:opacity-95 active:scale-95 transition-all text-sm flex items-center justify-center gap-2">
+                                <i class="fas fa-save"></i> Simpan Data & Perbarui KTA
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- VIEW: ADMIN PANEL (KENDALI KELOLA DATA & PERSETUJUAN USER) -->
+            <section id="view-admin" class="view hidden space-y-8 animate-fade-in">
+
+                <div
+                    class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                    <div>
+                        <h3 class="text-2xl font-black text-slate-800">Panel Administrator Utama</h3>
+                        <p class="text-slate-500 text-sm">Otoritas pengelolaan verifikasi pendaftaran akun, validasi
+                            keanggotaan, dan ekspor data IPM-P Jayapura.</p>
+                    </div>
+                    <button onclick="exportToCSV()"
+                        class="w-full md:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3.5 rounded-2xl text-sm font-bold shadow-lg shadow-emerald-600/15 transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-file-csv"></i> Ekspor Semua (.CSV)
+                    </button>
+                </div>
+
+                <!-- Bagian 1: Persetujuan Registrasi Akun Baru -->
+                <div class="bg-white rounded-3xl border border-rose-100 shadow-lg overflow-hidden">
+                    <div class="p-6 border-b border-rose-50 bg-rose-50/20 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span
+                                class="w-10 h-10 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-lg"><i
+                                    class="fas fa-user-clock"></i></span>
+                            <div>
+                                <h4 class="font-extrabold text-slate-800 text-base">Persetujuan Registrasi Akun Baru
+                                </h4>
+                                <p class="text-slate-400 text-xs">Pilih setujui (Approve) agar user dapat masuk dan
+                                    melengkapi berkas.</p>
+                            </div>
+                        </div>
+                        <span id="admin-pending-count-badge"
+                            class="bg-rose-600 text-white font-extrabold text-xs px-3 py-1 rounded-full">0
+                            Antrean</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="bg-slate-50/50 border-b border-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                    <th class="py-4 px-6">ID Pengguna</th>
+                                    <th class="py-4 px-6">Username</th>
+                                    <th class="py-4 px-6">Korwil Registrasi</th>
+                                    <th class="py-4 px-6">Status Sistem</th>
+                                    <th class="py-4 px-6 text-right">Tindakan Otoritas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-pending-users-body"
+                                class="divide-y divide-slate-100 text-sm text-slate-700">
+                                <!-- Dynamic Pending User Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State Pending -->
+                    <div id="admin-pending-empty-state" class="hidden p-12 text-center text-slate-400 bg-slate-50/20">
+                        <i class="fas fa-user-check text-3xl mb-2 text-emerald-500 block"></i>
+                        <span class="text-xs font-semibold text-slate-500">Semua pendaftaran telah diproses! Tidak ada
+                            antrean baru.</span>
+                    </div>
+                </div>
+
+                <!-- Bagian 2: Distribusi Geografis & Tabel Pengelolaan Anggota Lolos Verifikasi -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                    <div
+                        class="lg:col-span-1 bg-white p-6 rounded-3xl border border-slate-100 shadow-md flex flex-col justify-between">
+                        <h4 class="font-bold text-slate-800 text-base border-b border-slate-100 pb-3">Proporsi Anggota
+                            per Korwil</h4>
+
+                        <div class="py-8 space-y-4">
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs font-bold text-slate-600">
+                                    <span>Korwil Pirime</span>
+                                    <span id="chart-lbl-prm">0%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                                    <div id="chart-bar-prm"
+                                        class="bg-emerald-600 h-full rounded-full transition-all duration-1000"
+                                        style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs font-bold text-slate-600">
+                                    <span>Korwil Bugukgonak</span>
+                                    <span id="chart-lbl-bgk">0%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                                    <div id="chart-bar-bgk"
+                                        class="bg-teal-500 h-full rounded-full transition-all duration-1000"
+                                        style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs font-bold text-slate-600">
+                                    <span>Korwil Awina</span>
+                                    <span id="chart-lbl-awn">0%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                                    <div id="chart-bar-awn"
+                                        class="bg-blue-500 h-full rounded-full transition-all duration-1000"
+                                        style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs font-bold text-slate-600">
+                                    <span>Korwil Milimbo</span>
+                                    <span id="chart-lbl-mlb">0%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                                    <div id="chart-bar-mlb"
+                                        class="bg-indigo-500 h-full rounded-full transition-all duration-1000"
+                                        style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-[11px] text-slate-400 text-center italic">Persentase sebaran wilayah domisili
+                            terdaftar.</p>
+                    </div>
+
+                    <div
+                        class="lg:col-span-2 bg-white rounded-3xl border border-slate-100 shadow-md overflow-hidden flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="p-6 border-b border-slate-100 flex flex-wrap gap-4 items-center justify-between">
+                                <h4 class="font-bold text-slate-800 text-base">Kelola Keanggotaan Terdaftar</h4>
+                                <div class="flex items-center gap-2">
+                                    <select id="admin-filter-korwil" onchange="renderAdminData()"
+                                        class="px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold outline-none focus:border-emerald-500">
+                                        <option value="">Semua Korwil</option>
+                                        <option value="Pirime">Pirime</option>
+                                        <option value="Bugukgonak">Bugukgonak</option>
+                                        <option value="Awina">Awina</option>
+                                        <option value="Milimbo">Milimbo</option>
+                                    </select>
+                                    <select id="admin-filter-status" onchange="renderAdminData()"
+                                        class="px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold outline-none focus:border-emerald-500">
+                                        <option value="">Semua Status</option>
+                                        <option value="Aktif">Aktif</option>
+                                        <option value="Alumni">Alumni</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr
+                                            class="bg-slate-50 border-b border-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                            <th class="py-4 px-6">No. KTA</th>
+                                            <th class="py-4 px-6">Nama Anggota</th>
+                                            <th class="py-4 px-6">NIM</th>
+                                            <th class="py-4 px-6">Kampus</th>
+                                            <th class="py-4 px-6">Aksi Kontrol</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-table-body"
+                                        class="divide-y divide-slate-100 text-sm text-slate-700">
+                                        <!-- Dynamic Generated Admin Rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Empty State Admin -->
+                        <div id="admin-empty-state" class="hidden p-12 text-center text-slate-400">
+                            <i class="fas fa-users-slash text-3xl mb-2 block"></i>
+                            <span class="text-xs font-semibold">Belum ada anggota yang lolos filter di atas.</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-emerald-950 text-emerald-100 py-12 border-t border-emerald-900 relative z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 justify-between gap-8">
+                <div class="flex items-start gap-4">
+                    <div
+                        class="bg-white p-1 rounded-2xl shadow-lg border border-white/10 flex items-center justify-center w-16 h-16 overflow-hidden shrink-0">
+                        <img src="logo_IPMP-removebg-preview.png" class="app-logo-img w-full h-full object-contain"
+                            alt="Logo IPM-P" onerror="this.src=CONFIG.LOGO_FALLBACK">
+                    </div>
+                    <div>
+                        <h3 class="text-white font-extrabold text-lg tracking-wide font-heading">IKATAN PELAJAR
+                            MAHASISWA PIRIME (IPM-P)</h3>
+                        <p class="text-xs text-emerald-400 mt-1"> DI KOTA STUDI JAYAPURA, PROVINSI PAPUA</p>
+                        <p class="text-xs text-emerald-300/80 mt-4 leading-relaxed max-w-sm">
+                            Mengayomi dan memajukan seluruh intelektual pemuda asal distrik Pirime, Bugukgonak, Awina,
+                            dan Milimbo di Kota Studi Jayapura.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:items-end justify-between gap-4">
+                    <span
+                        class="inline-block px-4 py-1.5 bg-emerald-900/60 text-emerald-400 font-extrabold text-[10px] uppercase tracking-widest rounded-full border border-emerald-800">
+                        Sistem Pendataan Terpadu v2.0
+                    </span>
+                    <p class="text-xs text-emerald-500">
+                        &copy; 2026 IPM-P Jayapura. Hak cipta dilindungi undang-undang. <a
+                            href="https://webap652.github.io/royswanimbo.io/" style="color: crimson;">👉Pengembang❤️</a>
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Confirm Modal System -->
+    <div id="confirm-modal"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
+        <div
+            class="bg-white rounded-[28px] p-7 max-w-sm w-full shadow-2xl border border-slate-100 transform scale-95 transition-all duration-300">
+            <div class="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center text-xl mb-4">
+                <i class="fas fa-triangle-exclamation animate-pulse"></i>
+            </div>
+            <h4 class="text-lg font-black text-slate-800 mb-1.5" id="confirm-title">Konfirmasi Aksi?</h4>
+            <p class="text-xs sm:text-sm text-slate-500 leading-relaxed mb-6" id="confirm-msg">Apakah Anda yakin dengan
+                keputusan tindakan ini?</p>
+            <div class="flex justify-end gap-3">
+                <button id="btn-confirm-cancel"
+                    class="px-5 py-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all">Batal</button>
+                <button id="btn-confirm-ok"
+                    class="px-5 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-bold text-white shadow-lg shadow-red-600/15 transition-all">Konfirmasi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Floating Toast Alert -->
+    <div id="toast"
+        class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 ease-out max-w-sm w-full bg-white border border-slate-100 shadow-2xl p-4 rounded-2xl flex items-center gap-3.5">
+        <div id="toast-icon" class="w-10 h-10 rounded-full flex items-center justify-center text-lg"></div>
+        <div>
+            <h5 id="toast-title" class="font-extrabold text-xs sm:text-sm text-slate-800">Notifikasi</h5>
+            <p id="toast-message" class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Pesan sistem akan muncul disini.
+            </p>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC WORKSPACE -->
+    <script>
+        let appState = {
+            activeView: "home",
+            currentUser: null,
+            users: [],
+            biodata: [],
+            confirmCallback: null
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initDatabase();
+            setAppLogos();
+            fetchData();
+            navigate("home");
+        });
+
+        function setAppLogos() {
+            const logo = CONFIG.LOGO_URL;
+            if (logo) {
+                document.querySelectorAll('.app-logo-img').forEach(img => {
+                    img.src = logo;
+                    img.onerror = function () {
+                        this.src = CONFIG.LOGO_FALLBACK;
+                    };
+                });
+            }
+        }
+
+        function initDatabase() {
+            if (!localStorage.getItem("ipmp_users")) {
+                const initialUsers = [
+                    { id: "U-1", username: "adminipmp@gmail.com", password: "admin123", role: "admin", korwil: "Pirime", status: "Approved" },
+                    { id: "U-2", username: "mahasiswa", password: "123", role: "user", korwil: "Bugukgonak", status: "Approved" },
+                    { id: "U-3", username: "pendaftarbaru", password: "123", role: "user", korwil: "Milimbo", status: "Pending" }
+                ];
+                localStorage.setItem("ipmp_users", JSON.stringify(initialUsers));
+            }
+            if (!localStorage.getItem("ipmp_biodata")) {
+                const initialBiodata = [
+                    {
+                        id: "B-1",
+                        userId: "U-2",
+                        nim: "202308101",
+                        nama: "Yohanes Wenda",
+                        korwil: "Bugukgonak",
+                        status: "Aktif",
+                        kampus: "Universitas Cenderawasih",
+                        jurusan: "Sistem Informasi",
+                        tahunMasuk: "2023",
+                        tahunLulus: "",
+                        hp: "082212345678",
+                        alamat: "Asrama Nayak, Padang Bulan, Jayapura",
+                        kodeUnik: "IPMP-BGK-001",
+                        createdAt: new Date().toISOString()
+                    }
+                ];
+                localStorage.setItem("ipmp_biodata", JSON.stringify(initialBiodata));
+            }
+
+            appState.users = JSON.parse(localStorage.getItem("ipmp_users"));
+            appState.biodata = JSON.parse(localStorage.getItem("ipmp_biodata"));
+        }
+
+        async function fetchData() {
+            if (CONFIG.DATABASE_URL && CONFIG.DATABASE_URL.trim() !== "") {
+                showToast("Sinkronisasi Cloud", "Mengambil data terbaru dari Google Sheets...", "info");
+                try {
+                    const response = await fetch(`${CONFIG.DATABASE_URL}?action=getAllData`);
+                    const result = await response.json();
+                    if (result.status === "success") {
+                        appState.users = result.data.users;
+                        appState.biodata = result.data.biodata;
+                        showToast("Sinkron Selesai", "Data sukses diperbarui dari awan.", "success");
+                    }
+                } catch (error) {
+                    console.error("Gagal sinkron cloud:", error);
+                    showToast("Mode Offline", "Koneksi cloud gagal. Menggunakan basis data offline.", "warning");
+                }
+            }
+
+            updateStats();
+            filterSearch();
+            renderAdminData();
+            renderPendingUsers();
+        }
+
+        function updateStats() {
+            const list = appState.biodata;
+            const total = list.length;
+            const aktif = list.filter(b => b.status === "Aktif").length;
+            const alumni = list.filter(b => b.status === "Alumni").length;
+
+            // Mencari jumlah akun registrasi baru yang butuh persetujuan
+            const pendingRegs = appState.users.filter(u => u.status === "Pending" && u.role !== "admin").length;
+
+            document.getElementById("stat-total").innerText = total;
+            document.getElementById("stat-aktif").innerText = aktif;
+            document.getElementById("stat-alumni").innerText = alumni;
+            document.getElementById("stat-pending").innerText = pendingRegs;
+
+            // Stats breakdown per Korwil
+            const prmList = list.filter(b => b.korwil === "Pirime");
+            const bgkList = list.filter(b => b.korwil === "Bugukgonak");
+            const awnList = list.filter(b => b.korwil === "Awina");
+            const mlbList = list.filter(b => b.korwil === "Milimbo");
+
+            document.getElementById("count-prm-aktif").innerText = prmList.filter(b => b.status === "Aktif").length;
+            document.getElementById("count-prm-alumni").innerText = prmList.filter(b => b.status === "Alumni").length;
+
+            document.getElementById("count-bgk-aktif").innerText = bgkList.filter(b => b.status === "Aktif").length;
+            document.getElementById("count-bgk-alumni").innerText = bgkList.filter(b => b.status === "Alumni").length;
+
+            document.getElementById("count-awn-aktif").innerText = awnList.filter(b => b.status === "Aktif").length;
+            document.getElementById("count-awn-alumni").innerText = awnList.filter(b => b.status === "Alumni").length;
+
+            document.getElementById("count-mlb-aktif").innerText = mlbList.filter(b => b.status === "Aktif").length;
+            document.getElementById("count-mlb-alumni").innerText = mlbList.filter(b => b.status === "Alumni").length;
+
+            // Proporsional Analytical Progress Bar
+            const prmRatio = total > 0 ? Math.round((prmList.length / total) * 100) : 0;
+            const bgkRatio = total > 0 ? Math.round((bgkList.length / total) * 100) : 0;
+            const awnRatio = total > 0 ? Math.round((awnList.length / total) * 100) : 0;
+            const mlbRatio = total > 0 ? Math.round((mlbList.length / total) * 100) : 0;
+
+            document.getElementById("chart-lbl-prm").innerText = prmRatio + "%";
+            document.getElementById("chart-bar-prm").style.width = prmRatio + "%";
+
+            document.getElementById("chart-lbl-bgk").innerText = bgkRatio + "%";
+            document.getElementById("chart-bar-bgk").style.width = bgkRatio + "%";
+
+            document.getElementById("chart-lbl-awn").innerText = awnRatio + "%";
+            document.getElementById("chart-bar-awn").style.width = awnRatio + "%";
+
+            document.getElementById("chart-lbl-mlb").innerText = mlbRatio + "%";
+            document.getElementById("chart-bar-mlb").style.width = mlbRatio + "%";
+        }
+
+        function navigate(viewId) {
+            document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+            const currentView = document.getElementById(`view-${viewId}`);
+            if (currentView) {
+                currentView.classList.remove("hidden");
+                appState.activeView = viewId;
+            }
+
+            // Update Nav link styles
+            document.querySelectorAll(".nav-link").forEach(lnk => {
+                lnk.classList.remove("text-emerald-900", "bg-emerald-50/80");
+                lnk.classList.add("text-slate-600");
+            });
+
+            if (viewId === "dashboard") {
+                loadUserDashboard();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById("mobile-menu");
+            menu.classList.toggle("hidden");
+        }
+
+        function toggleKTAFlip() {
+            const card = document.getElementById("kta-card-inner");
+            card.classList.toggle("kta-card-flipped");
+        }
+
+        function toggleTahunLulus() {
+            const status = document.getElementById("bio-status").value;
+            const target = document.getElementById("div-tahun-lulus");
+            if (status === "Alumni") {
+                target.classList.remove("hidden");
+            } else {
+                target.classList.add("hidden");
+                document.getElementById("bio-tahun-lulus").value = "";
+            }
+        }
+
+        function showConfirm(title, message, callback) {
+            const modal = document.getElementById("confirm-modal");
+            document.getElementById("confirm-title").innerText = title;
+            document.getElementById("confirm-msg").innerText = message;
+            modal.classList.remove("hidden");
+
+            appState.confirmCallback = callback;
+        }
+
+        document.getElementById("btn-confirm-cancel").addEventListener("click", () => {
+            document.getElementById("confirm-modal").classList.add("hidden");
+            appState.confirmCallback = null;
+        });
+
+        document.getElementById("btn-confirm-ok").addEventListener("click", () => {
+            if (appState.confirmCallback) {
+                appState.confirmCallback();
+            }
+            document.getElementById("confirm-modal").classList.add("hidden");
+            appState.confirmCallback = null;
+        });
+
+        function showToast(title, message, type = "info") {
+            const toast = document.getElementById("toast");
+            const icon = document.getElementById("toast-icon");
+            const toastTitle = document.getElementById("toast-title");
+            const toastMsg = document.getElementById("toast-message");
+
+            toastTitle.innerText = title;
+            toastMsg.innerText = message;
+
+            if (type === "success") {
+                icon.className = "w-10 h-10 rounded-full flex items-center justify-center text-lg bg-emerald-50 text-emerald-600 shadow-md shadow-emerald-500/10";
+                icon.innerHTML = `<i class="fas fa-circle-check animate-bounce"></i>`;
+            } else if (type === "error") {
+                icon.className = "w-10 h-10 rounded-full flex items-center justify-center text-lg bg-rose-50 text-rose-600 shadow-md shadow-rose-500/10";
+                icon.innerHTML = `<i class="fas fa-triangle-exclamation animate-pulse"></i>`;
+            } else if (type === "warning") {
+                icon.className = "w-10 h-10 rounded-full flex items-center justify-center text-lg bg-amber-50 text-amber-600 shadow-md shadow-amber-500/10";
+                icon.innerHTML = `<i class="fas fa-circle-exclamation"></i>`;
+            } else {
+                icon.className = "w-10 h-10 rounded-full flex items-center justify-center text-lg bg-sky-50 text-sky-600 shadow-md shadow-sky-500/10";
+                icon.innerHTML = `<i class="fas fa-circle-info"></i>`;
+            }
+
+            toast.classList.remove("translate-y-24", "opacity-0");
+
+            setTimeout(() => {
+                toast.classList.add("translate-y-24", "opacity-0");
+            }, 5000);
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+            const username = document.getElementById("reg-username").value.trim().toLowerCase();
+            const password = document.getElementById("reg-password").value;
+            const korwil = document.getElementById("reg-korwil").value;
+
+            if (username.length < 3 || password.length < 6) {
+                showToast("Gagal Registrasi", "Username min. 3 karakter, sandi min. 6 karakter.", "error");
+                return;
+            }
+
+            const existing = appState.users.find(u => u.username === username);
+            if (existing) {
+                showToast("Akun Terdaftar", "Nama pengguna sudah digunakan.", "warning");
+                return;
+            }
+
+            const newUser = {
+                id: "U-" + Date.now(),
+                username: username,
+                password: password,
+                role: "user",
+                korwil: korwil,
+                status: "Pending" // Default status pending, butuh persetujuan admin
+            };
+
+            if (CONFIG.DATABASE_URL && CONFIG.DATABASE_URL.trim() !== "") {
+                showToast("Memproses Registrasi", "Sedang mengirim permohonan akun ke pengurus...", "info");
+                try {
+                    const response = await fetch(CONFIG.DATABASE_URL, {
+                        method: "POST",
+                        body: JSON.stringify({ action: "register", user: newUser })
+                    });
+                    const result = await response.json();
+                    if (result.status === "success") {
+                        appState.users.push(newUser);
+                        showToast("Registrasi Dikirim", "Selesai! Hubungi admin/pengurus untuk menyetujui akun Anda.", "success");
+                        navigate("login");
+                    } else {
+                        showToast("Registrasi Gagal", result.message, "error");
+                    }
+                } catch (error) {
+                    showToast("Koneksi Error", "Gagal menghubungi database cloud.", "error");
+                }
+            } else {
+                appState.users.push(newUser);
+                localStorage.setItem("ipmp_users", JSON.stringify(appState.users));
+                showToast("Simulasi Berhasil", "Registrasi dicatat lokal dengan status: PENDING. Silakan login sebagai Admin untuk menyetujuinya.", "warning");
+                navigate("login");
+            }
+            updateStats();
+            renderPendingUsers();
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById("login-username").value.trim().toLowerCase();
+            const password = document.getElementById("login-password").value;
+
+            const user = appState.users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                if (user.role !== "admin" && user.status === "Pending") {
+                    showToast("Akses Tertahan", "Registrasi Akun Anda masih menunggu persetujuan (Approval) dari Admin.", "warning");
+                    return;
+                }
+                if (user.role !== "admin" && user.status === "Rejected") {
+                    showToast("Pendaftaran Ditolak", "Maaf, permohonan registrasi Anda ditolak. Silakan hubungi admin Korwil.", "error");
+                    return;
+                }
+
+                appState.currentUser = user;
+                loginSession(user);
+                showToast("Berhasil Masuk", `Selamat datang kembali, ${user.username}!`, "success");
+                navigate("dashboard");
+            } else {
+                showToast("Gagal Masuk", "Username atau password Anda tidak valid.", "error");
+            }
+        }
+
+        function loginSession(user) {
+            document.getElementById("auth-buttons").classList.add("hidden");
+            document.getElementById("auth-buttons-mobile").classList.add("hidden");
+            document.getElementById("user-profile-menu").classList.remove("hidden");
+            document.getElementById("nav-user-name").innerText = user.username;
+            document.getElementById("nav-user-role").innerText = user.role === "admin" ? "Administrator" : "Anggota";
+
+            document.getElementById("btn-dashboard-nav").classList.remove("hidden");
+            document.getElementById("btn-dashboard-nav-mobile").classList.remove("hidden");
+
+            if (user.role === "admin") {
+                document.getElementById("btn-admin-nav").classList.remove("hidden");
+                document.getElementById("btn-admin-nav-mobile").classList.remove("hidden");
+            }
+        }
+
+        function logout() {
+            appState.currentUser = null;
+            document.getElementById("auth-buttons").classList.remove("hidden");
+            document.getElementById("auth-buttons-mobile").classList.remove("hidden");
+            document.getElementById("user-profile-menu").classList.add("hidden");
+
+            document.getElementById("btn-dashboard-nav").classList.add("hidden");
+            document.getElementById("btn-dashboard-nav-mobile").classList.add("hidden");
+            document.getElementById("btn-admin-nav").classList.add("hidden");
+            document.getElementById("btn-admin-nav-mobile").classList.add("hidden");
+
+            showToast("Logout", "Sesi login Anda berhasil dihentikan.", "info");
+            navigate("home");
+        }
+
+        function loadUserDashboard() {
+            if (!appState.currentUser) return;
+
+            const myBiodata = appState.biodata.find(b => b.userId === appState.currentUser.id);
+            document.getElementById("bio-korwil").value = appState.currentUser.korwil;
+
+            if (myBiodata) {
+                document.getElementById("biodata-id").value = myBiodata.id;
+                document.getElementById("bio-nama").value = myBiodata.nama;
+                document.getElementById("bio-nim").value = myBiodata.nim;
+                document.getElementById("bio-status").value = myBiodata.status;
+                document.getElementById("bio-kampus").value = myBiodata.kampus;
+                document.getElementById("bio-jurusan").value = myBiodata.jurusan;
+                document.getElementById("bio-tahun-masuk").value = myBiodata.tahunMasuk;
+                document.getElementById("bio-tahun-lulus").value = myBiodata.tahunLulus || "";
+                document.getElementById("bio-hp").value = myBiodata.hp;
+                document.getElementById("bio-alamat").value = myBiodata.alamat;
+
+                toggleTahunLulus();
+                updateProfileCard(myBiodata);
+
+                document.getElementById("korwil-badge-container").classList.remove("hidden");
+                document.getElementById("korwil-badge-container").classList.add("flex");
+                document.getElementById("txt-kode-unik").innerText = myBiodata.kodeUnik;
+            } else {
+                document.getElementById("biodata-id").value = "";
+                document.getElementById("bio-nama").value = "";
+                document.getElementById("bio-nim").value = "";
+                document.getElementById("bio-status").value = "Aktif";
+                document.getElementById("bio-kampus").value = "";
+                document.getElementById("bio-jurusan").value = "";
+                document.getElementById("bio-tahun-masuk").value = "";
+                document.getElementById("bio-tahun-lulus").value = "";
+                document.getElementById("bio-hp").value = "";
+                document.getElementById("bio-alamat").value = "";
+
+                document.getElementById("korwil-badge-container").classList.add("hidden");
+                document.getElementById("korwil-badge-container").classList.remove("flex");
+                updateProfileCard(null);
+            }
+        }
+
+        function updateProfileCard(b) {
+            if (b) {
+                document.getElementById("kta-front-nama").innerText = b.nama;
+                document.getElementById("kta-front-korwil").innerText = b.korwil;
+                document.getElementById("kta-front-nim").innerText = b.nim || "-";
+                document.getElementById("kta-front-kode").innerText = b.kodeUnik;
+                document.getElementById("kta-header-title").innerText = `IKATAN PELAJAR MAHASISWA ${b.korwil.toUpperCase()}`;
+                document.getElementById("kta-back-qr").src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=VERIFIED-IPMP-${b.kodeUnik}`;
+            } else {
+                document.getElementById("kta-front-nama").innerText = "Nama Lengkap Anda";
+                document.getElementById("kta-front-korwil").innerText = appState.currentUser.korwil;
+                document.getElementById("kta-front-nim").innerText = "-";
+                document.getElementById("kta-front-kode").innerText = "BELUM TERVERIFIKASI";
+                document.getElementById("kta-back-qr").src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=BELUM-TERDAFTAR`;
+                document.getElementById("kta-header-title").innerText = `IKATAN PELAJAR MAHASISWA ${appState.currentUser.korwil.toUpperCase()}`;
+            }
+        }
+
+        async function handleSaveBiodata(event) {
+            event.preventDefault();
+            if (!appState.currentUser) return;
+
+            const existingBiodata = appState.biodata.find(b => b.userId === appState.currentUser.id);
+            let codePrefix = CONFIG.KORWILS[appState.currentUser.korwil].code;
+            let kodeUnik = existingBiodata ? existingBiodata.kodeUnik : "";
+
+            if (!kodeUnik) {
+                const korwilCount = appState.biodata.filter(b => b.korwil === appState.currentUser.korwil).length + 1;
+                const formattedNum = String(korwilCount).padStart(3, '0');
+                kodeUnik = `IPMP-${codePrefix}-${formattedNum}`;
+            }
+
+            const bioData = {
+                id: document.getElementById("biodata-id").value || "B-" + Date.now(),
+                userId: appState.currentUser.id,
+                nama: document.getElementById("bio-nama").value.trim(),
+                nim: document.getElementById("bio-nim").value.trim(),
+                status: document.getElementById("bio-status").value,
+                korwil: appState.currentUser.korwil,
+                kampus: document.getElementById("bio-kampus").value.trim(),
+                jurusan: document.getElementById("bio-jurusan").value.trim(),
+                tahunMasuk: document.getElementById("bio-tahun-masuk").value,
+                tahunLulus: document.getElementById("bio-tahun-lulus").value || "",
+                hp: document.getElementById("bio-hp").value.trim(),
+                alamat: document.getElementById("bio-alamat").value.trim(),
+                kodeUnik: kodeUnik,
+                createdAt: existingBiodata ? existingBiodata.createdAt : new Date().toISOString()
+            };
+
+            if (CONFIG.DATABASE_URL && CONFIG.DATABASE_URL.trim() !== "") {
+                showToast("Menyimpan...", "Mengunggah data diri ke cloud database...", "info");
+                try {
+                    const response = await fetch(CONFIG.DATABASE_URL, {
+                        method: "POST",
+                        body: JSON.stringify({ action: "saveBiodata", biodata: bioData })
+                    });
+                    const result = await response.json();
+                    if (result.status === "success") {
+                        if (existingBiodata) {
+                            const idx = appState.biodata.findIndex(b => b.id === bioData.id);
+                            appState.biodata[idx] = bioData;
+                        } else {
+                            appState.biodata.push(bioData);
+                        }
+                        showToast("Penyimpanan Berhasil", "Biodata berhasil diamankan di cloud database.", "success");
+                        loadUserDashboard();
+                        updateStats();
+                        filterSearch();
+                        renderAdminData();
+                    }
+                } catch (error) {
+                    showToast("Koneksi Cloud Gagal", "Gagal menghubungi database, harap coba lagi.", "error");
+                }
+            } else {
+                if (existingBiodata) {
+                    const idx = appState.biodata.findIndex(b => b.id === bioData.id);
+                    appState.biodata[idx] = bioData;
+                } else {
+                    appState.biodata.push(bioData);
+                }
+                localStorage.setItem("ipmp_biodata", JSON.stringify(appState.biodata));
+                showToast("Simpan Berhasil", "Basis data lokal sukses diperbarui.", "success");
+                loadUserDashboard();
+                updateStats();
+                filterSearch();
+                renderAdminData();
+            }
+        }
+
+        function filterSearch() {
+            const query = document.getElementById("search-input").value.trim().toLowerCase();
+            const korwilFilter = document.getElementById("search-korwil").value;
+            const statusFilter = document.getElementById("search-status").value;
+
+            const container = document.getElementById("search-results-body");
+            const emptyState = document.getElementById("search-empty-state");
+            container.innerHTML = "";
+
+            let filtered = appState.biodata.filter(b => {
+                const matchQuery = b.nama.toLowerCase().includes(query) ||
+                    (b.nim && b.nim.toLowerCase().includes(query)) ||
+                    b.kodeUnik.toLowerCase().includes(query);
+                const matchKorwil = korwilFilter === "" || b.korwil === korwilFilter;
+                const matchStatus = statusFilter === "" || b.status === statusFilter;
+
+                return matchQuery && matchKorwil && matchStatus;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove("hidden");
+            } else {
+                emptyState.classList.add("hidden");
+                filtered.forEach(b => {
+                    const row = document.createElement("tr");
+                    row.className = "hover:bg-slate-50 transition-all border-b border-slate-100";
+                    row.innerHTML = `
+                        <td class="py-5 px-6 font-bold text-slate-800">${b.nama}</td>
+                        <td class="py-5 px-6">
+                            <span class="inline-block px-3 py-1 bg-emerald-50 text-emerald-800 font-extrabold text-[11px] tracking-wider rounded-xl border border-emerald-100">${b.kodeUnik}</span>
+                        </td>
+                        <td class="py-5 px-6 text-slate-500 font-bold">${b.korwil}</td>
+                        <td class="py-5 px-6">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold ${b.status === 'Aktif' ? 'bg-sky-50 text-sky-600 border border-sky-100' : 'bg-amber-50 text-amber-600 border border-amber-100'}">
+                                ${b.status === "Aktif" ? "Mahasiswa Aktif" : "Alumni"}
+                            </span>
+                        </td>
+                        <td class="py-5 px-6">
+                            <p class="font-semibold text-slate-800 leading-none">${b.kampus}</p>
+                            <span class="text-xs text-slate-400 mt-1 block">${b.jurusan}</span>
+                        </td>
+                        <td class="py-5 px-6 font-bold text-slate-500">${b.tahunMasuk}</td>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+        }
+
+        function renderPendingUsers() {
+            const container = document.getElementById("admin-pending-users-body");
+            const emptyState = document.getElementById("admin-pending-empty-state");
+            const navBadge = document.getElementById("nav-pending-badge");
+            const titleBadge = document.getElementById("admin-pending-count-badge");
+
+            container.innerHTML = "";
+            const pendingUsers = appState.users.filter(u => u.status === "Pending" && u.role !== "admin");
+
+            // Mengupdate notifikasi badge admin
+            if (pendingUsers.length > 0) {
+                navBadge.innerText = pendingUsers.length;
+                navBadge.classList.remove("hidden");
+                titleBadge.innerText = `${pendingUsers.length} Antrean`;
+                titleBadge.className = "bg-rose-600 text-white font-extrabold text-xs px-3 py-1 rounded-full animate-pulse";
+                emptyState.classList.add("hidden");
+            } else {
+                navBadge.classList.add("hidden");
+                titleBadge.innerText = "0 Antrean";
+                titleBadge.className = "bg-slate-200 text-slate-600 font-extrabold text-xs px-3 py-1 rounded-full";
+                emptyState.classList.remove("hidden");
+            }
+
+            pendingUsers.forEach(u => {
+                const row = document.createElement("tr");
+                row.className = "hover:bg-slate-50 border-b border-slate-100 transition-all";
+                row.innerHTML = `
+                    <td class="py-4 px-6 text-xs font-mono text-slate-400">${u.id}</td>
+                    <td class="py-4 px-6 font-bold text-slate-800">${u.username}</td>
+                    <td class="py-4 px-6 font-semibold text-slate-600">${u.korwil}</td>
+                    <td class="py-4 px-6">
+                        <span class="px-2.5 py-1 bg-amber-50 text-amber-600 border border-amber-200 rounded-full text-xs font-bold flex items-center gap-1.5 w-max">
+                            <i class="fas fa-spinner animate-spin"></i> Pending Approval
+                        </span>
+                    </td>
+                    <td class="py-4 px-6 text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            <button onclick="processApproval('${u.id}', 'Approved')" class="px-3 py-1.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white border border-emerald-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
+                                <i class="fas fa-check"></i> Setujui
+                            </button>
+                            <button onclick="processApproval('${u.id}', 'Rejected')" class="px-3 py-1.5 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white border border-rose-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
+                                <i class="fas fa-xmark"></i> Tolak
+                            </button>
+                        </div>
+                    </td>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        async function processApproval(userId, actionStatus) {
+            const userObj = appState.users.find(u => u.id === userId);
+            if (!userObj) return;
+
+            const statusText = actionStatus === "Approved" ? "menyetujui" : "menolak";
+
+            showConfirm(
+                `${actionStatus === "Approved" ? "Setujui" : "Tolak"} Akun Baru?`,
+                `Apakah Anda yakin ingin ${statusText} akun '${userObj.username}' dari Korwil ${userObj.korwil}?`,
+                async () => {
+                    if (CONFIG.DATABASE_URL && CONFIG.DATABASE_URL.trim() !== "") {
+                        showToast("Memproses...", "Mengirim status persetujuan ke cloud database...", "info");
+                        try {
+                            const response = await fetch(CONFIG.DATABASE_URL, {
+                                method: "POST",
+                                body: JSON.stringify({ action: "updateUserStatus", userId: userId, status: actionStatus })
+                            });
+                            const result = await response.json();
+                            if (result.status === "success") {
+                                userObj.status = actionStatus;
+                                showToast("Berhasil Diproses", `Akun '${userObj.username}' resmi memiliki status: ${actionStatus}`, "success");
+                                updateStats();
+                                renderPendingUsers();
+                            } else {
+                                showToast("Gagal Otoritas", result.message, "error");
+                            }
+                        } catch (error) {
+                            showToast("Kesalahan Cloud", "Gagal menghubungi server Apps Script.", "error");
+                        }
+                    } else {
+                        userObj.status = actionStatus;
+                        localStorage.setItem("ipmp_users", JSON.stringify(appState.users));
+                        showToast("Simulasi Sukses", `Status lokal akun '${userObj.username}' diset menjadi: ${actionStatus}`, "success");
+                        updateStats();
+                        renderPendingUsers();
+                    }
+                }
+            );
+        }
+
+        function renderAdminData() {
+            const korwilFilter = document.getElementById("admin-filter-korwil").value;
+            const statusFilter = document.getElementById("admin-filter-status").value;
+            const container = document.getElementById("admin-table-body");
+            const emptyState = document.getElementById("admin-empty-state");
+            container.innerHTML = "";
+
+            let filtered = appState.biodata.filter(b => {
+                const matchKorwil = korwilFilter === "" || b.korwil === korwilFilter;
+                const matchStatus = statusFilter === "" || b.status === statusFilter;
+                return matchKorwil && matchStatus;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove("hidden");
+            } else {
+                emptyState.classList.add("hidden");
+                filtered.forEach(b => {
+                    const row = document.createElement("tr");
+                    row.className = "hover:bg-slate-50 border-b border-slate-100 transition-all";
+                    row.innerHTML = `
+                        <td class="py-4 px-6 font-extrabold text-emerald-800">${b.kodeUnik}</td>
+                        <td class="py-4 px-6 font-bold text-slate-800">${b.nama}</td>
+                        <td class="py-4 px-6 text-xs font-semibold text-slate-400">${b.nim || '-'}</td>
+                        <td class="py-4 px-6">
+                            <p class="font-bold text-slate-700">${b.kampus}</p>
+                            <p class="text-[11px] text-slate-400">${b.jurusan} (${b.status})</p>
+                        </td>
+                        <td class="py-4 px-6">
+                            <button onclick="triggerDeleteMember('${b.id}')" class="w-9 h-9 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-full transition-all flex items-center justify-center border border-transparent hover:border-rose-100" title="Hapus Data">
+                                <i class="fas fa-trash-can text-sm"></i>
+                            </button>
+                        </td>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+        }
+
+        function triggerDeleteMember(id) {
+            showConfirm("Hapus Data Anggota?", "Tindakan ini tidak dapat dibatalkan. Apakah Anda yakin ingin menghapus data anggota ini secara permanen?", () => {
+                deleteMember(id);
+            });
+        }
+
+        async function deleteMember(id) {
+            if (CONFIG.DATABASE_URL && CONFIG.DATABASE_URL.trim() !== "") {
+                showToast("Menghapus...", "Sedang memproses penghapusan di cloud...", "info");
+                try {
+                    const response = await fetch(CONFIG.DATABASE_URL, {
+                        method: "POST",
+                        body: JSON.stringify({ action: "deleteData", id: id })
+                    });
+                    const result = await response.json();
+                    if (result.status === "success") {
+                        appState.biodata = appState.biodata.filter(b => b.id !== id);
+                        showToast("Dihapus", "Data anggota berhasil dihapus dari awan.", "success");
+                        updateStats();
+                        filterSearch();
+                        renderAdminData();
+                    }
+                } catch (error) {
+                    showToast("Gagal Menghapus", "Kegagalan sinkronisasi cloud database.", "error");
+                }
+            } else {
+                appState.biodata = appState.biodata.filter(b => b.id !== id);
+                localStorage.setItem("ipmp_biodata", JSON.stringify(appState.biodata));
+                showToast("Dihapus", "Data terhapus di penyimpanan lokal.", "success");
+                updateStats();
+                filterSearch();
+                renderAdminData();
+            }
+        }
+
+        function exportToCSV() {
+            if (appState.biodata.length === 0) {
+                showToast("Gagal Ekspor", "Belum ada entri biodata yang bisa diekspor.", "error");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "No. KTA,Nama Lengkap,NIM,Korwil,Status,Perguruan Tinggi,Jurusan,Tahun Masuk,Tahun Lulus,No. HP,Alamat,Tanggal Daftar\n";
+
+            appState.biodata.forEach(b => {
+                let row = [
+                    b.kodeUnik,
+                    `"${b.nama}"`,
+                    `"${b.nim || '-'}"`,
+                    b.korwil,
+                    b.status,
+                    `"${b.kampus}"`,
+                    `"${b.jurusan}"`,
+                    b.tahunMasuk,
+                    b.tahunLulus || "-",
+                    `"${b.hp}"`,
+                    `"${b.alamat.replace(/\n/g, ' ')}"`,
+                    b.createdAt
+                ].join(",");
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Data_Anggota_IPMP_Jayapura.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast("Sukses Ekspor", "Data berhasil dikonversi ke file CSV.", "success");
+        }
+    </script>
+</body>
+
+</html>
